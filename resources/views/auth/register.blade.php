@@ -16,6 +16,27 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Address -->
+        <div class="mt-4">
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" autocomplete="address" />
+            <x-input-error :messages="$errors->get('address')" class="mt-2" />
+        </div>
+
+        <!-- Contact No -->
+        <div class="mt-4">
+            <x-input-label for="contact_no" :value="__('Contact No')" />
+            <x-text-input id="contact_no" class="block mt-1 w-full" type="text" name="contact_no" :value="old('contact_no')" autocomplete="contact_no" />
+            <x-input-error :messages="$errors->get('contact_no')" class="mt-2" />
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="mt-4">
+            <x-input-label for="dob" :value="__('Date of Birth')" />
+            <x-text-input id="dob" class="block mt-1 w-full" type="date" name="dob" :value="old('dob')" autocomplete="dob" />
+            <x-input-error :messages="$errors->get('dob')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
