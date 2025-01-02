@@ -20,10 +20,29 @@ class PrescriptionController extends Controller
         $this->service = $service;
     }
 
-    public function store(StorePrescriptionRequest $request)
+    public function create()
+    {
+        return view('prescriptions.create');
+    }
+
+    public function index()
+    {
+        $prescriptions = auth()->user()->prescriptions()->latest()->get();
+        return view('prescriptions.index', compact('prescriptions'));
+    }
+
+    public function indexForPharmacy()
+    {
+        $prescriptions = Prescription::latest()->with('user')->get(); // Get all prescriptions with user details
+        return view('pharmacy.prescriptions.index', compact('prescriptions'));
+    }
+
+
+
+    public function store(PrescriptionRequest $request)
     {
         $this->service->create($request->validated());
 
-        return response()->json(['message' => 'Prescription uploaded successfully!'], 201);
+        return redirect()->route('dashboard')->with('success', 'Prescription uploaded successfully!');
     }
 }

@@ -9,8 +9,24 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
+                    <form action="{{ route('prescriptions.create') }}" method="GET" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Create Prescriptions</button>
+                    </form>                    
+                </div>     
+            </div>
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <form action="{{ route('prescriptions.index') }}" method="GET" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">My Prescriptions</button>
+                    </form>                    
+                </div>     
+            </div>
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
+                <div class="p-6 text-gray-900 dark:text-gray-100 ">
+                    <form action="{{ route('pharmacy.quotations.index') }}" method="GET" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">My Qoutations</button>
+                    </form>                    
+                </div>    
             </div>
         </div>
     </div>
