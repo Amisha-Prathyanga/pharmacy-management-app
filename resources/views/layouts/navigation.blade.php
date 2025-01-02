@@ -11,11 +11,18 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                </div> --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="auth()->user()->role === 'admin' ? route('pharmacy.prescriptions.index') : route('dashboard')" 
+                                :active="auth()->user()->role === 'admin' ? request()->routeIs('pharmacy.prescriptions.index') : request()->routeIs('dashboard')">
+                        {{ auth()->user()->role === 'admin' ? __('Prescriptions') : __('Dashboard') }}
+                    </x-nav-link>
                 </div>
+                
             </div>
 
             <!-- Settings Dropdown -->

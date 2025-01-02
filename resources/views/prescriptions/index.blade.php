@@ -267,7 +267,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Close modal on escape key
+        
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeModal();

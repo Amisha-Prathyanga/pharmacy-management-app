@@ -239,6 +239,30 @@
         background: #1f2937;
         border: 1px solid #374151;
     }
+
+    .status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.status-accepted {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+.status-rejected {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.status-pending {
+    background-color: #ff9800; /* Orange */
+    color: white;
+}
+
 </style>
 <x-app-layout>
     <x-slot name="header">
@@ -281,9 +305,33 @@
                         <p>{{ $prescription->user->email }}</p>
                     </div>
                 </div>
-                <span class="status-badge status-pending">
-                    Pending Quotation
+                @if($prescription->quotations->isNotEmpty())
+                @php
+                    $quotation = $prescription->quotations->first(); // Get the first quotation if available
+                @endphp
+                <span class="status-badge 
+                    @if($quotation->status === 'accepted') 
+                        status-accepted
+                    @elseif($quotation->status === 'rejected') 
+                        status-rejected
+                    @else
+                        status-pending
+                    @endif
+                ">
+                    {{ ucfirst($quotation->status) }} Quotation
                 </span>
+                @else
+                    <span class="status-badge status-pending">
+                        No Quotation
+                    </span>
+
+                    <!-- Show the button only if there is no quotation -->
+                    <div class="actions">
+                        <a href="{{ route('quotations.create', $prescription) }}" class="btn btn-primary">
+                            Prepare Quotation
+                        </a>
+                    </div>
+                @endif
             </div>
 
             <div class="prescription-details">
@@ -321,19 +369,11 @@
                     @endforeach
                 </div>
             </div>
-
-            <div class="actions">
-                <a href="{{ route('quotations.create', $prescription) }}" class="btn btn-primary">
-                    Prepare Quotation
-                </a>
-                <button class="btn btn-secondary">
-                    View Details
-                </button>
-            </div>
         </div>
     @endforeach
 </div>
 </x-app-layout>
+
 <script>
     function openImagePreview(imageSrc) {
         let modal = document.getElementById('imagePreviewModal');

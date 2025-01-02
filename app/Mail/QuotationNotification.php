@@ -1,13 +1,12 @@
-<?php
+<?php 
 
 namespace App\Mail;
 
+use App\Models\Quotation;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class QuotationNotification extends Mailable
 {
@@ -15,47 +14,29 @@ class QuotationNotification extends Mailable
 
     public $quotation;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($quotation)
+    public function __construct(Quotation $quotation)
     {
         $this->quotation = $quotation;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Quotation Notification',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
-    }
-
     public function build()
     {
-        return $this->view('emails.quotation')
-                    ->with('quotation', $this->quotation);
+        $email = $this->subject('New Quotation Created')
+                      ->view('emails.quotation_notification') 
+                      ->with([
+                          'quotation' => $this->quotation,
+                      ]);
+
+        // Attach prescription images if available
+        if ($this->quotation->prescription->images) {
+            foreach ($this->quotation->prescription->images as $image) {
+                $email->attach(storage_path('app/public/' . $image), [
+                    'as' => basename($image),
+                    'mime' => 'image/jpeg',
+                ]);
+            }
+        }
+
+        return $email;
     }
 }

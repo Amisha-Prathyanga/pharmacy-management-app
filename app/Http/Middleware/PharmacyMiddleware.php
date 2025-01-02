@@ -15,7 +15,7 @@ class PharmacyMiddleware
             return $next($request);
         }
 
-        // If the user is not authorized, return a 403 response
+        
         return response()->json(['error' => 'Unauthorized'], 403);
     }
 }

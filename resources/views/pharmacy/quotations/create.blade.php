@@ -147,6 +147,13 @@
     }
 </style>
 
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
+
 <div class="quotation-container">
     <div class="form-header">
         <h2>Prepare Quotation for Prescription</h2>
@@ -175,7 +182,7 @@
                                required>
                     </div>
                     <div class="input-group">
-                        <span class="input-label">Price (₹)</span>
+                        <span class="input-label">Price (LKR)</span>
                         <input type="number" 
                                name="drugs[0][price]" 
                                placeholder="0.00" 
@@ -193,7 +200,7 @@
 
         <div class="total-section">
             <div class="input-label">Total Amount</div>
-            <div class="total-amount">₹ <span id="total">0.00</span></div>
+            <div class="total-amount">LKR <span id="total">0.00</span></div>
         </div>
 
         <div class="form-actions">
@@ -202,6 +209,7 @@
         </div>
     </form>
 </div>
+</x-app-layout>
 
 <script>
 let drugIndex = 1;

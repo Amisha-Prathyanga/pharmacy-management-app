@@ -78,40 +78,89 @@
     </style>
 <body>
 
-<div class="container">
-    <h2>Upload Prescription</h2>
-    <form action="{{ route('prescriptions.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="form-group">
-            <label for="note" class="form-label">Note (optional):</label>
-            <textarea name="note" id="note" class="form-control" rows="3">{{ old('note') }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="delivery_address" class="form-label">Delivery Address:</label>
-            <input type="text" name="delivery_address" id="delivery_address" class="form-control" value="{{ old('delivery_address') }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="delivery_time" class="form-label">Delivery Time:</label>
-            <select name="delivery_time" id="delivery_time" class="form-control" required>
-                <option value="">Select a time slot</option>
-                <option value="8-10 AM">8-10 AM</option>
-                <option value="10-12 PM">10-12 PM</option>
-                <option value="12-2 PM">12-2 PM</option>
-                <option value="2-4 PM">2-4 PM</option>
-                <option value="4-6 PM">4-6 PM</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="images" class="form-label">Upload Prescription Images (max: 5):</label>
-            <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*" required>
-        </div>
-
-        <button type="submit">Upload</button>
-    </form>
-</div>
+    <div class="container">
+        <h2>Upload Prescription</h2>
+        <form action="{{ route('prescriptions.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+                <label for="note" class="form-label">Note (optional):</label>
+                <textarea name="note" id="note" class="form-control" rows="3">{{ old('note') }}</textarea>
+            </div>
+    
+            <div class="form-group">
+                <label for="delivery_address" class="form-label">Delivery Address:</label>
+                <input type="text" name="delivery_address" id="delivery_address" class="form-control" value="{{ old('delivery_address') }}" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="delivery_time" class="form-label">Delivery Time:</label>
+                <select name="delivery_time" id="delivery_time" class="form-control" required>
+                    <option value="">Select a time slot</option>
+                    <option value="8-10 AM">8-10 AM</option>
+                    <option value="10-12 PM">10-12 PM</option>
+                    <option value="12-2 PM">12-2 PM</option>
+                    <option value="2-4 PM">2-4 PM</option>
+                    <option value="4-6 PM">4-6 PM</option>
+                </select>
+            </div>
+    
+            <div class="form-group">
+                <label for="images" class="form-label">Upload Prescription Images (max: 5):</label>
+                <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*" required max="5">
+                <small class="text-muted">You can select up to 5 images</small>
+            </div>
+    
+            <!-- Preview container for selected images -->
+            <div id="imagePreviewContainer" class="mt-3 d-flex flex-wrap gap-2"></div>
+    
+            <button type="submit" class="btn btn-primary mt-3">Upload</button>
+        </form>
+    
+        @if(isset($prescription) && $prescription->images)
+            <div class="mt-4">
+                <h3>Uploaded Images</h3>
+                <div class="d-flex flex-wrap gap-3">
+                    @foreach($prescription->images as $image)
+                        <div class="position-relative">
+                            <img src="{{ Storage::url($image) }}" 
+                                 alt="Prescription Image" 
+                                 class="img-thumbnail"
+                                 style="height: 200px; width: 200px; object-fit: cover;">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    </div>
 
 </body>
+
+<script>
+    document.getElementById('images').addEventListener('change', function(event) {
+        const container = document.getElementById('imagePreviewContainer');
+        container.innerHTML = ''; // Clear previous previews
+        
+        if (event.target.files.length > 5) {
+            alert('You can only select up to 5 images');
+            event.target.value = '';
+            return;
+        }
+    
+        Array.from(event.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'position-relative';
+                div.innerHTML = `
+                    <img src="${e.target.result}" 
+                         alt="Preview" 
+                         class="img-thumbnail"
+                         style="height: 200px; width: 200px; object-fit: cover;">
+                `;
+                container.appendChild(div);
+            }
+            reader.readAsDataURL(file);
+        });
+    });
+    </script>
 </html>

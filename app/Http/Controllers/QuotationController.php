@@ -10,6 +10,7 @@ use App\Services\PrescriptionService;
 use App\Services\QuotationService;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\QuotationNotification;
+use RealRashid\SweetAlert\Facades\Alert;
 
 use Illuminate\Http\Request;
 
@@ -24,9 +25,9 @@ class QuotationController extends Controller
 
     public function index()
     {
-        // Get quotations for prescriptions that belong to the authenticated user
+        
         $quotations = Quotation::whereHas('prescription', function($query) {
-            $query->where('user_id', auth()->id()); // Only get quotations for prescriptions owned by the logged-in user
+            $query->where('user_id', auth()->id());
         })->get();
 
         return view('quotations.index', compact('quotations'));
@@ -38,9 +39,10 @@ class QuotationController extends Controller
     {
         $quotation = $this->service->create($request->validated(), $prescription);
 
-        // // Send email notification
-        // Mail::to($prescription->user->email)->send(new QuotationNotification($quotation));
+        // Send email notification
+        Mail::to($prescription->user->email)->send(new QuotationNotification($quotation));
 
+        Alert::success('Success', 'Quotation prepared and sent to the user.');
         return redirect()->route('pharmacy.prescriptions.index')
             ->with('success', 'Quotation prepared and sent to the user.');
     }
@@ -54,6 +56,7 @@ class QuotationController extends Controller
         // $pharmacyEmail = config('app.pharmacy_email');
         // Mail::to($pharmacyEmail)->send(new QuotationStatusNotification($quotation));
 
+        Alert::success('Success', 'Quotation status updated successfully.');
         return redirect()->route('prescriptions.index')
             ->with('success', 'Quotation status updated successfully.');
     }

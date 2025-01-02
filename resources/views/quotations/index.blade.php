@@ -155,14 +155,14 @@
     
         @foreach ($quotations as $quotation)
             <div class="quotation-card">
-                <!-- Left: Images -->
+               
                 <div class="image-section">
                     @foreach ($quotation->prescription->images as $image)
                         <img src="{{ asset('storage/' . $image) }}" alt="Prescription" class="img-thumbnail">
                     @endforeach
                 </div>
     
-                <!-- Middle: Details and Drugs -->
+                
                 <div class="details-section">
                     <div class="prescription-header">
                         <div>
@@ -203,7 +203,7 @@
                     </div>
                 </div>
     
-                <!-- Right: Actions -->
+                
                 <div class="actions-section">
                     <form action="{{ route('quotations.updateStatus', $quotation) }}" method="POST">
                         @csrf
